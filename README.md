@@ -1,4 +1,62 @@
+# 📊 Project Plan: Business Intelligence from Websites for Insurance Risk
 
+## 🚀 Project Overview
+
+This end-to-end AI project aims to infer business characteristics relevant to insurance underwriting, using publicly available business websites as the data source.
+
+Given a business website URL, the system will:
+- Scrape website **text and images**
+- Generate a concise **business summary** using a Large Language Model (LLM)
+- Predict the business’s **NAICS code**
+- Extract insurance-relevant **risk indicators**:
+  - 💳 E-commerce capability
+  - 🚚 Vehicle use (from both text and image)
+  - 🔐 Cyber risk exposure
+
+---
+
+## 🛠️ Tech Stack
+
+| Component            | Tools |
+|---------------------|-------|
+| Frontend            | Streamlit |
+| Backend/API         | Python, FastAPI (if needed) |
+| LLM                 | OpenAI API or Azure OpenAI |
+| CV (vehicle)        | YOLOv8 or Azure Computer Vision |
+| Cloud Deployment    | Azure (App Service, Container Apps) |
+| Monitoring          | Azure Monitor / Application Insights |
+| Storage             | Local or Azure Blob (optional) |
+| Orchestration       | Python scripts (potential to expand to DAGs) |
+
+---
+
+## 📁 Folder Structure
+
+biz-intel-llm/
+├── app/ # Streamlit or FastAPI entrypoint
+│ ├── main.py # Main web app
+│ └── frontend/ # (Optional) frontend components
+├── core/ # Business logic modules
+│ ├── scraper.py # Website scraping (text + images)
+│ ├── summarizer.py # LLM summarization logic
+│ ├── classifier.py # NAICS prediction
+│ ├── image_analysis.py # Vehicle detection from images
+│ ├── prompts/ # Prompt templates for LLM
+│ └── utils.py
+├── data/ # Sample data, test websites, labeled data
+├── models/ # Trained models or checkpoints
+├── monitor/ # Logging and monitoring tools
+│ ├── logging_config.py
+│ └── metrics_collector.py
+├── notebooks/ # Prototyping & EDA
+├── tests/ # Unit and integration tests
+├── docs/ # Architecture diagrams, illustrations
+├── azure-deploy/ # Azure-specific config or IaC
+├── requirements.txt
+├── Dockerfile
+├── .env.example
+├── README.md
+└── PROJECT_PLAN.md
 ---
 
 ## 📆 10-Week Learning & Build Plan (1 Hour/Day)
