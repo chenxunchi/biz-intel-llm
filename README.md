@@ -31,7 +31,7 @@ Given a business website URL, the system will:
 ---
 
 ## 📁 Folder Structure
-
+```
 biz-intel-llm/
 ├── app/ # Streamlit or FastAPI entrypoint
 │ ├── main.py # Main web app
@@ -57,6 +57,7 @@ biz-intel-llm/
 ├── .env.example
 ├── README.md
 └── PROJECT_PLAN.md
+```
 ---
 
 ## 📆 10-Week Learning & Build Plan (1 Hour/Day)
