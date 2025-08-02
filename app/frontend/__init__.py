@@ -1,0 +1,1 @@
+"""Frontend components for the Business Intelligence Risk Assessment app."""

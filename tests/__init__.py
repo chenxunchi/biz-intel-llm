@@ -1,0 +1,1 @@
+"""Test package for Business Intelligence Risk Assessment system."""
