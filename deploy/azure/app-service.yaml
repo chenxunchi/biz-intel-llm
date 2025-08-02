@@ -1,0 +1,45 @@
+# Azure App Service deployment configuration
+# Deploy with: az webapp up --resource-group <rg> --name <app-name> --runtime "PYTHON:3.11"
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: biz-intel-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: biz-intel-app
+  template:
+    metadata:
+      labels:
+        app: biz-intel-app
+    spec:
+      containers:
+      - name: biz-intel-container
+        image: bizintelllm.azurecr.io/biz-intel-app:latest
+        ports:
+        - containerPort: 8501
+        env:
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: openai-api-key
+        - name: AZURE_OPENAI_KEY
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: azure-openai-key
+        - name: AZURE_OPENAI_ENDPOINT
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: azure-openai-endpoint
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
