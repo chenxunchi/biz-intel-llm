@@ -8,11 +8,71 @@ text content and images for further analysis.
 import requests
 import re
 import xml.etree.ElementTree as ET
+from dataclasses import dataclass
+from datetime import datetime
 from typing import List, Dict, Optional, Set
 from urllib.parse import urljoin, urlparse
 from urllib.robotparser import RobotFileParser
 from bs4 import BeautifulSoup
 from config.settings import settings
+
+
+@dataclass
+class ScrapingOptions:
+    """Configuration options for business scraping."""
+    max_pages: int = 10
+    include_images: bool = True
+    timeout_per_page: int = 30
+    page_types: List[str] = None
+    
+    def __post_init__(self):
+        if self.page_types is None:
+            self.page_types = ["about", "services", "contact", "home", "other"]
+
+
+@dataclass
+class PageData:
+    """Data structure for individual page scraping results."""
+    url: str
+    page_type: str
+    text_content: str
+    text_length: int
+    images: List[Dict]
+    scraped_at: datetime
+    scrape_success: bool
+    error_message: Optional[str] = None
+
+
+@dataclass
+class BusinessData:
+    """Unified data structure for complete business scraping results."""
+    business_url: str
+    scraped_at: datetime
+    scraping_metadata: Dict
+    pages: List[PageData]
+    business_intelligence: Dict
+    
+    def to_dict(self) -> Dict:
+        """Convert to dictionary for JSON serialization."""
+        return {
+            "business_url": self.business_url,
+            "scraped_at": self.scraped_at.isoformat(),
+            "scraping_metadata": self.scraping_metadata,
+            "pages": [
+                {
+                    "url": page.url,
+                    "page_type": page.page_type,
+                    "text_content": page.text_content,
+                    "text_length": page.text_length,
+                    "images": page.images,
+                    "scraped_at": page.scraped_at.isoformat(),
+                    "scrape_success": page.scrape_success,
+                    "error_message": page.error_message
+                }
+                for page in self.pages
+            ],
+            "business_intelligence": self.business_intelligence
+        }
 
 
 class WebsiteScraper:
@@ -599,3 +659,304 @@ class WebsiteScraper:
         
         # Sort by priority score (descending)
         return sorted(urls, key=get_priority_score, reverse=True)
+    
+    def scrape_business(self, base_url: str, options: ScrapingOptions = None) -> BusinessData:
+        """Comprehensive business website analysis with unified output.
+        
+        Args:
+            base_url: The base URL of the business website
+            options: Scraping configuration options
+            
+        Returns:
+            BusinessData: Unified structure with all scraped information
+        """
+        options = options or ScrapingOptions()
+        start_time = datetime.now()
+        
+        try:
+            # Step 1: Page Discovery (existing method)
+            discovered_urls = self.discover_pages(base_url, options.max_pages)
+            
+            # Step 2: Process Each Page
+            pages = []
+            for url in discovered_urls:
+                page_data = self._scrape_single_page(url, options)
+                pages.append(page_data)
+            
+            # Step 3: Compute Business Intelligence
+            business_intel = self._compute_business_intelligence(pages)
+            
+            # Step 4: Generate Metadata
+            metadata = self._generate_scraping_metadata(pages, start_time)
+            
+            # Step 5: Package Results
+            return BusinessData(
+                business_url=base_url,
+                scraped_at=start_time,
+                scraping_metadata=metadata,
+                pages=pages,
+                business_intelligence=business_intel
+            )
+            
+        except Exception as e:
+            # Fallback for complete failure
+            return BusinessData(
+                business_url=base_url,
+                scraped_at=start_time,
+                scraping_metadata={
+                    "total_pages_attempted": 0,
+                    "successful_pages": 0,
+                    "failed_pages": 0,
+                    "success_rate": 0.0,
+                    "total_scrape_time": (datetime.now() - start_time).total_seconds(),
+                    "errors": [str(e)]
+                },
+                pages=[],
+                business_intelligence={}
+            )
+    
+    def _scrape_single_page(self, url: str, options: ScrapingOptions) -> PageData:
+        """Scrape content from a single page with error handling.
+        
+        Args:
+            url: Page URL to scrape
+            options: Scraping options
+            
+        Returns:
+            PageData: Results for the single page
+        """
+        scrape_start = datetime.now()
+        
+        try:
+            # Classify page type
+            page_type = self._classify_page_type(url)
+            
+            # Skip if page type not requested
+            if page_type not in options.page_types:
+                return PageData(
+                    url=url,
+                    page_type=page_type,
+                    text_content="",
+                    text_length=0,
+                    images=[],
+                    scraped_at=scrape_start,
+                    scrape_success=True,
+                    error_message="Page type skipped per options"
+                )
+            
+            # Scrape content using existing methods
+            text_content = ""
+            images = []
+            
+            try:
+                text_content = self.scrape_text(url)
+            except Exception as e:
+                # Continue with image scraping even if text fails
+                pass
+            
+            if options.include_images:
+                try:
+                    images = self.scrape_images(url)
+                except Exception as e:
+                    # Continue even if image scraping fails
+                    pass
+            
+            return PageData(
+                url=url,
+                page_type=page_type,
+                text_content=text_content,
+                text_length=len(text_content),
+                images=images,
+                scraped_at=scrape_start,
+                scrape_success=True
+            )
+            
+        except Exception as e:
+            return PageData(
+                url=url,
+                page_type="unknown",
+                text_content="",
+                text_length=0,
+                images=[],
+                scraped_at=scrape_start,
+                scrape_success=False,
+                error_message=str(e)
+            )
+    
+    def _classify_page_type(self, url: str) -> str:
+        """Classify page type based on URL patterns.
+        
+        Args:
+            url: URL to classify
+            
+        Returns:
+            Page type classification
+        """
+        url_lower = url.lower()
+        
+        page_type_patterns = {
+            "about": ["about", "company", "team", "history", "who-we-are", "our-story"],
+            "services": ["services", "products", "solutions", "offerings", "what-we-do"],
+            "contact": ["contact", "location", "address", "phone", "reach-us", "get-in-touch"],
+            "home": ["", "/", "home", "index", "main", "landing"],
+        }
+        
+        for page_type, patterns in page_type_patterns.items():
+            if any(pattern in url_lower for pattern in patterns):
+                return page_type
+        
+        return "other"
+    
+    def _compute_business_intelligence(self, pages: List[PageData]) -> Dict:
+        """Compute business intelligence metrics from scraped pages.
+        
+        Args:
+            pages: List of scraped page data
+            
+        Returns:
+            Business intelligence dictionary
+        """
+        successful_pages = [p for p in pages if p.scrape_success]
+        failed_pages = [p for p in pages if not p.scrape_success]
+        
+        # Basic metrics
+        total_pages = len(pages)
+        success_count = len(successful_pages)
+        success_rate = success_count / total_pages if total_pages > 0 else 0
+        
+        # Content metrics
+        total_text = sum(p.text_length for p in successful_pages)
+        total_images = sum(len(p.images) for p in successful_pages)
+        avg_text_per_page = total_text / success_count if success_count > 0 else 0
+        avg_images_per_page = total_images / success_count if success_count > 0 else 0
+        
+        # Page type analysis
+        page_types_found = list(set(p.page_type for p in successful_pages))
+        key_pages_present = self._check_key_pages(successful_pages)
+        
+        # Content quality assessment
+        quality_score = self._calculate_content_quality_score(successful_pages)
+        
+        return {
+            "scraping_metrics": {
+                "total_pages_found": total_pages,
+                "successful_pages": success_count,
+                "failed_pages": len(failed_pages),
+                "success_rate": round(success_rate, 3)
+            },
+            "content_metrics": {
+                "total_text_length": total_text,
+                "total_images": total_images,
+                "avg_text_per_page": round(avg_text_per_page, 0),
+                "avg_images_per_page": round(avg_images_per_page, 1)
+            },
+            "page_analysis": {
+                "page_types_found": page_types_found,
+                "key_pages_present": key_pages_present,
+                "content_quality_score": round(quality_score, 2)
+            },
+            "errors": [p.error_message for p in failed_pages if p.error_message]
+        }
+    
+    def _check_key_pages(self, pages: List[PageData]) -> Dict[str, bool]:
+        """Check which key business pages are present.
+        
+        Args:
+            pages: List of successful page data
+            
+        Returns:
+            Dictionary of key page presence flags
+        """
+        page_types = {p.page_type for p in pages}
+        
+        return {
+            "has_about": "about" in page_types,
+            "has_services": "services" in page_types,
+            "has_contact": "contact" in page_types,
+            "has_home": "home" in page_types
+        }
+    
+    def _calculate_content_quality_score(self, pages: List[PageData]) -> float:
+        """Calculate content quality score based on various factors.
+        
+        Args:
+            pages: List of successful page data
+            
+        Returns:
+            Quality score between 0.0 and 1.0
+        """
+        if not pages:
+            return 0.0
+        
+        score = 0.0
+        max_score = 0.0
+        
+        # Factor 1: Text content richness (0-0.4)
+        avg_text_length = sum(p.text_length for p in pages) / len(pages)
+        if avg_text_length > 5000:
+            score += 0.4
+        elif avg_text_length > 2000:
+            score += 0.3
+        elif avg_text_length > 500:
+            score += 0.2
+        elif avg_text_length > 100:
+            score += 0.1
+        max_score += 0.4
+        
+        # Factor 2: Image presence (0-0.2)
+        avg_images = sum(len(p.images) for p in pages) / len(pages)
+        if avg_images > 5:
+            score += 0.2
+        elif avg_images > 2:
+            score += 0.15
+        elif avg_images > 0:
+            score += 0.1
+        max_score += 0.2
+        
+        # Factor 3: Key pages completeness (0-0.3)
+        key_pages = self._check_key_pages(pages)
+        key_pages_count = sum(key_pages.values())
+        score += (key_pages_count / 4) * 0.3
+        max_score += 0.3
+        
+        # Factor 4: Success rate (0-0.1)
+        success_rate = len([p for p in pages if p.scrape_success]) / len(pages)
+        score += success_rate * 0.1
+        max_score += 0.1
+        
+        return min(score / max_score, 1.0) if max_score > 0 else 0.0
+    
+    def _generate_scraping_metadata(self, pages: List[PageData], start_time: datetime) -> Dict:
+        """Generate metadata about the scraping process.
+        
+        Args:
+            pages: List of page data
+            start_time: When scraping started
+            
+        Returns:
+            Metadata dictionary
+        """
+        end_time = datetime.now()
+        total_time = (end_time - start_time).total_seconds()
+        
+        successful_pages = [p for p in pages if p.scrape_success]
+        failed_pages = [p for p in pages if not p.scrape_success]
+        
+        return {
+            "scraping_session": {
+                "started_at": start_time.isoformat(),
+                "completed_at": end_time.isoformat(),
+                "total_duration_seconds": round(total_time, 2)
+            },
+            "page_processing": {
+                "total_pages_attempted": len(pages),
+                "successful_pages": len(successful_pages),
+                "failed_pages": len(failed_pages),
+                "success_rate": round(len(successful_pages) / len(pages), 3) if pages else 0.0
+            },
+            "errors": [p.error_message for p in failed_pages if p.error_message],
+            "performance": {
+                "avg_time_per_page": round(total_time / len(pages), 2) if pages else 0.0,
+                "pages_per_minute": round((len(pages) / total_time) * 60, 1) if total_time > 0 else 0.0
+            }
+        }

@@ -5,40 +5,159 @@ This directory contains the core business intelligence processing modules for an
 ## 📁 Module Overview
 
 ### 🕷️ `scraper.py` - Website Content Extraction
-**Status:** ✅ FULLY IMPLEMENTED
+**Status:** ✅ FULLY IMPLEMENTED (v2.0 - Unified Output)
 
-**Purpose:** Ethical scraping of business websites with content discovery and robots.txt compliance.
+**Purpose:** Ethical scraping of business websites with unified output structure for LLM integration.
 
 **Key Classes:**
-- `WebsiteScraper` - Main scraping functionality
+- `WebsiteScraper` - Main scraping functionality with unified output
+- `ScrapingOptions` - Configuration dataclass for scraping behavior
+- `PageData` - Individual page scraping results
+- `BusinessData` - Complete business analysis results
 
 **Features:**
+- **🎯 Unified Output Architecture** - Single method provides complete business data
 - Text content extraction with cleaning and filtering
-- Image metadata extraction (no downloads)
+- Image metadata extraction (URLs, alt text, dimensions)
 - Automatic page discovery via sitemap.xml and internal links
 - URL normalization (handles incomplete URLs like "abc.com")
 - Robots.txt compliance with domain-level caching
-- Business page prioritization (about, services, products)
+- Business page prioritization and type classification
+- **📊 Business Intelligence Computation** - Automatic quality scoring and metrics
+- **🔧 Structured Data Format** - LLM-ready JSON output
 
-**Usage:**
+## 📥📤 INPUT/OUTPUT SPECIFICATION
+
+### **🚀 Primary Method: `scrape_business()`**
+
+**Input:**
 ```python
-from core.scraper import WebsiteScraper
+from core.scraper import WebsiteScraper, ScrapingOptions
 
+# Configuration options
+options = ScrapingOptions(
+    max_pages=10,           # Maximum pages to discover and scrape
+    include_images=True,    # Whether to extract image metadata
+    timeout_per_page=30,    # Timeout per page in seconds
+    page_types=[            # Page types to include
+        "about", "services", "contact", "home", "other"
+    ]
+)
+
+# Single method call
 scraper = WebsiteScraper()
+result = scraper.scrape_business("example.com", options)
+```
 
-# Single page scraping
+**Output Structure:**
+```python
+BusinessData {
+    business_url: str              # Normalized input URL
+    scraped_at: datetime          # When scraping started
+    scraping_metadata: {          # Process metadata
+        "scraping_session": {
+            "started_at": "2024-01-01T10:00:00",
+            "completed_at": "2024-01-01T10:02:30", 
+            "total_duration_seconds": 150.5
+        },
+        "page_processing": {
+            "total_pages_attempted": 8,
+            "successful_pages": 7,
+            "failed_pages": 1,
+            "success_rate": 0.875
+        },
+        "errors": ["Page timeout: /large-gallery"],
+        "performance": {
+            "avg_time_per_page": 18.8,
+            "pages_per_minute": 3.2
+        }
+    },
+    pages: [PageData...]          # Individual page results
+    business_intelligence: {      # Computed business metrics
+        "scraping_metrics": {
+            "total_pages_found": 8,
+            "successful_pages": 7, 
+            "failed_pages": 1,
+            "success_rate": 0.875
+        },
+        "content_metrics": {
+            "total_text_length": 45230,
+            "total_images": 23,
+            "avg_text_per_page": 6461,
+            "avg_images_per_page": 3.3
+        },
+        "page_analysis": {
+            "page_types_found": ["home", "about", "services", "contact"],
+            "key_pages_present": {
+                "has_about": true,
+                "has_services": true, 
+                "has_contact": true,
+                "has_home": true
+            },
+            "content_quality_score": 0.87
+        },
+        "errors": ["Timeout on gallery page"]
+    }
+}
+```
+
+**Individual Page Data Structure:**
+```python
+PageData {
+    url: str                      # Full page URL
+    page_type: str                # "about" | "services" | "contact" | "home" | "other"
+    text_content: str             # Cleaned text content
+    text_length: int              # Character count
+    images: [                     # Image metadata only (no downloads)
+        {
+            "url": "https://example.com/photo.jpg",
+            "alt_text": "Team photo",
+            "title": "Our team",
+            "width": "300",
+            "height": "200"
+        }
+    ],
+    scraped_at: datetime          # When this page was processed
+    scrape_success: bool          # Whether scraping succeeded
+    error_message: str | None     # Error details if failed
+}
+```
+
+### **📊 Business Intelligence Metrics**
+
+The unified output automatically computes:
+- **Success Rate:** Percentage of pages successfully scraped
+- **Content Quality Score:** 0.0-1.0 based on text richness, images, key pages
+- **Page Type Analysis:** Classification and completeness assessment
+- **Performance Metrics:** Speed and efficiency measurements
+
+### **🔄 Legacy Methods (Still Available)**
+
+Individual scraping methods remain available for specific use cases:
+```python
+# Legacy individual methods
 text = scraper.scrape_text("https://example.com")
-images = scraper.scrape_images("https://example.com")
-
-# Page discovery
+images = scraper.scrape_images("https://example.com") 
 pages = scraper.discover_pages("example.com", max_pages=10)
 ```
 
+### **✨ Unified vs Legacy Comparison**
+
+| Aspect | Legacy Approach | 🆕 Unified Approach |
+|--------|----------------|-------------------|
+| **Method Calls** | Multiple (`scrape_text`, `scrape_images`, `discover_pages`) | Single (`scrape_business`) |
+| **Output Format** | Fragmented strings and lists | Structured `BusinessData` object |
+| **Error Handling** | Manual coordination required | Automatic graceful handling |
+| **Metadata** | None | Rich scraping and performance metrics |
+| **LLM Integration** | Manual data preparation | Ready-to-use JSON structure |
+| **Business Intelligence** | Manual computation | Automatic quality scoring |
+
 **Design Principles:**
-- Stateless operation (no persistent storage)
-- Ethical scraping with proper User-Agent
-- Business-focused content filtering
-- Comprehensive error handling with graceful fallbacks
+- 🎯 **LLM-First Design** - Output optimized for language model consumption
+- 🔧 **Unified Interface** - Single method call for complete business analysis
+- 📊 **Rich Metadata** - Built-in quality assessment and performance metrics
+- 🛡️ **Graceful Degradation** - Partial failures don't break entire process
+- ⚡ **Performance Aware** - Built-in timing and efficiency measurements
 
 ---
 
