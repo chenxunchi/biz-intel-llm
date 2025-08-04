@@ -83,7 +83,7 @@ def test_unified_scraper():
     print(f"Results saved to: {results_file}")
     print(f"Completed: {datetime.now()}")
     
-    # Display comparison with old vs new approach
+    # Display unified approach benefits
     print(f"\n=== UNIFIED APPROACH BENEFITS ===")
     print("✅ Single method call gets complete business data")
     print("✅ Structured output perfect for LLM integration")
@@ -125,51 +125,29 @@ def test_scraping_options():
     print("✅ Options testing complete")
 
 
-def compare_old_vs_new():
-    """Compare old fragmented approach vs new unified approach."""
-    print(f"\n=== OLD VS NEW COMPARISON ===")
+def demonstrate_unified_approach():
+    """Demonstrate the unified scraper approach."""
+    print(f"\n=== UNIFIED SCRAPER DEMONSTRATION ===")
     
     scraper = WebsiteScraper()
     test_url = "https://domscoffee.com/"
     
-    print("OLD APPROACH (multiple calls):")
-    start_old = datetime.now()
+    print("UNIFIED APPROACH (single method call):")
+    start_time = datetime.now()
     
-    # Old way - multiple method calls
-    pages = scraper.discover_pages(test_url, max_pages=3)
-    all_text = ""
-    all_images = []
-    
-    for page in pages[:2]:  # Limit for demo
-        try:
-            text = scraper.scrape_text(page)
-            images = scraper.scrape_images(page)
-            all_text += text + " "
-            all_images.extend(images)
-        except:
-            pass
-    
-    old_time = (datetime.now() - start_old).total_seconds()
-    print(f"  Time: {old_time:.2f}s")
-    print(f"  Text: {len(all_text)} chars")
-    print(f"  Images: {len(all_images)}")
-    print(f"  Manual coordination required ❌")
-    
-    print("NEW APPROACH (unified call):")
-    start_new = datetime.now()
-    
-    # New way - single method call
+    # Single method call gets complete business data
     options = ScrapingOptions(max_pages=3)
     business_data = scraper.scrape_business(test_url, options)
     
-    new_time = (datetime.now() - start_new).total_seconds()
-    print(f"  Time: {new_time:.2f}s")
+    total_time = (datetime.now() - start_time).total_seconds()
+    print(f"  Time: {total_time:.2f}s")
     print(f"  Text: {business_data.business_intelligence['content_metrics']['total_text_length']} chars")
     print(f"  Images: {business_data.business_intelligence['content_metrics']['total_images']}")
-    print(f"  Structured output ✅")
-    print(f"  Business intelligence ✅")
-    print(f"  Error handling ✅")
-    print(f"  LLM-ready format ✅")
+    print(f"  Quality Score: {business_data.business_intelligence['page_analysis']['content_quality_score']}")
+    print(f"  ✅ Structured output ready for LLM")
+    print(f"  ✅ Automatic business intelligence")
+    print(f"  ✅ Built-in error handling")
+    print(f"  ✅ Performance metrics included")
 
 
 def main():
@@ -177,7 +155,7 @@ def main():
     try:
         test_unified_scraper()
         test_scraping_options()
-        compare_old_vs_new()
+        demonstrate_unified_approach()
         
         print(f"\n🎉 ALL TESTS COMPLETED SUCCESSFULLY!")
         print("The unified scraper is ready for LLM integration!")

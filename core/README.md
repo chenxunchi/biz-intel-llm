@@ -131,27 +131,6 @@ The unified output automatically computes:
 - **Page Type Analysis:** Classification and completeness assessment
 - **Performance Metrics:** Speed and efficiency measurements
 
-### **🔄 Legacy Methods (Still Available)**
-
-Individual scraping methods remain available for specific use cases:
-```python
-# Legacy individual methods
-text = scraper.scrape_text("https://example.com")
-images = scraper.scrape_images("https://example.com") 
-pages = scraper.discover_pages("example.com", max_pages=10)
-```
-
-### **✨ Unified vs Legacy Comparison**
-
-| Aspect | Legacy Approach | 🆕 Unified Approach |
-|--------|----------------|-------------------|
-| **Method Calls** | Multiple (`scrape_text`, `scrape_images`, `discover_pages`) | Single (`scrape_business`) |
-| **Output Format** | Fragmented strings and lists | Structured `BusinessData` object |
-| **Error Handling** | Manual coordination required | Automatic graceful handling |
-| **Metadata** | None | Rich scraping and performance metrics |
-| **LLM Integration** | Manual data preparation | Ready-to-use JSON structure |
-| **Business Intelligence** | Manual computation | Automatic quality scoring |
-
 **Design Principles:**
 - 🎯 **LLM-First Design** - Output optimized for language model consumption
 - 🔧 **Unified Interface** - Single method call for complete business analysis

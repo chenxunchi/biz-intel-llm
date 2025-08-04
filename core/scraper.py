@@ -88,115 +88,6 @@ class WebsiteScraper:
         self.timeout = settings.max_scrape_timeout
         self.robots_cache = {}  # Cache robots.txt files
     
-    def scrape_text(self, url: str) -> str:
-        """Extract text content from a website.
-        
-        Args:
-            url: The website URL to scrape
-            
-        Returns:
-            Extracted text content
-        """
-        try:
-            # Normalize URL first
-            normalized_url = self._normalize_url(url)
-            
-            if not self._validate_url(normalized_url):
-                raise ValueError(f"Invalid URL: {url}")
-            
-            # Try to find a working URL variation
-            working_url = self._try_url_variations(normalized_url)
-            
-            if not self._can_fetch(working_url):
-                raise ValueError(f"Robots.txt disallows scraping: {working_url}")
-            
-            response = self.session.get(working_url, timeout=self.timeout)
-            response.raise_for_status()
-            
-            soup = BeautifulSoup(response.content, 'html.parser')
-            
-            # Remove script and style elements
-            for script in soup(["script", "style", "nav", "footer", "header"]):
-                script.decompose()
-            
-            # Extract text from main content areas
-            text_content = []
-            
-            # Try to find main content areas first
-            main_content = soup.find_all(['main', 'article', 'section']) or [soup]
-            
-            for content in main_content:
-                # Get text from headings and paragraphs
-                for element in content.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'div', 'span']):
-                    text = element.get_text(strip=True)
-                    if text and len(text) > 10:  # Filter out very short text
-                        text_content.append(text)
-            
-            # Clean and join text
-            clean_text = self._clean_text(' '.join(text_content))
-            return clean_text
-            
-        except requests.RequestException as e:
-            raise Exception(f"Error scraping text from {url}: {str(e)}")
-        except Exception as e:
-            raise Exception(f"Unexpected error scraping {url}: {str(e)}")
-    
-    def scrape_images(self, url: str) -> List[Dict[str, str]]:
-        """Extract images from a website.
-        
-        Args:
-            url: The website URL to scrape
-            
-        Returns:
-            List of dictionaries containing image information
-        """
-        try:
-            # Normalize URL first
-            normalized_url = self._normalize_url(url)
-            
-            if not self._validate_url(normalized_url):
-                raise ValueError(f"Invalid URL: {url}")
-            
-            # Try to find a working URL variation
-            working_url = self._try_url_variations(normalized_url)
-            
-            if not self._can_fetch(working_url):
-                raise ValueError(f"Robots.txt disallows scraping: {working_url}")
-            
-            response = self.session.get(working_url, timeout=self.timeout)
-            response.raise_for_status()
-            
-            soup = BeautifulSoup(response.content, 'html.parser')
-            images = []
-            
-            # Find all img tags
-            img_tags = soup.find_all('img')
-            
-            for img in img_tags[:settings.max_images_per_site]:
-                src = img.get('src')
-                alt = img.get('alt', '')
-                
-                if src:
-                    # Convert relative URLs to absolute
-                    absolute_url = urljoin(url, src)
-                    
-                    # Filter out very small images and common non-content images
-                    if self._is_valid_image(img, alt):
-                        images.append({
-                            'url': absolute_url,
-                            'alt_text': alt,
-                            'title': img.get('title', ''),
-                            'width': img.get('width', ''),
-                            'height': img.get('height', '')
-                        })
-            
-            return images
-            
-        except requests.RequestException as e:
-            raise Exception(f"Error scraping images from {url}: {str(e)}")
-        except Exception as e:
-            raise Exception(f"Unexpected error scraping images from {url}: {str(e)}")
-    
     def _normalize_url(self, url: str) -> str:
         """Normalize and fix common URL formatting issues.
         
@@ -403,54 +294,6 @@ class WebsiteScraper:
         except Exception:
             # Any error - allow by default
             self.robots_cache[base_url] = None
-    
-    def discover_pages(self, base_url: str, max_pages: int = 10) -> List[str]:
-        """Discover important pages from a business website.
-        
-        Args:
-            base_url: The base URL of the website (e.g., https://example.com)
-            max_pages: Maximum number of pages to discover
-            
-        Returns:
-            List of discovered page URLs prioritized by business relevance
-        """
-        try:
-            # Normalize URL first
-            normalized_url = self._normalize_url(base_url)
-            
-            if not self._validate_url(normalized_url):
-                raise ValueError(f"Invalid base URL: {base_url}")
-            
-            # Try to find a working URL variation
-            working_url = self._try_url_variations(normalized_url)
-            
-            discovered_urls = set()
-            
-            # 1. Always include the homepage
-            discovered_urls.add(working_url.rstrip('/'))
-            
-            # 2. Try sitemap discovery first (most comprehensive)
-            sitemap_urls = self._discover_from_sitemap(working_url)
-            discovered_urls.update(sitemap_urls)
-            
-            # 3. If we don't have enough pages, discover from internal links
-            if len(discovered_urls) < max_pages:
-                link_urls = self._discover_from_links(working_url, max_pages - len(discovered_urls))
-                discovered_urls.update(link_urls)
-            
-            # 4. Prioritize pages by business relevance
-            prioritized_urls = self._prioritize_business_pages(list(discovered_urls))
-            
-            return prioritized_urls[:max_pages]
-            
-        except Exception as e:
-            # Fallback to normalized URL if discovery fails
-            try:
-                normalized_url = self._normalize_url(base_url)
-                working_url = self._try_url_variations(normalized_url)
-                return [working_url.rstrip('/')]
-            except:
-                return [base_url.rstrip('/')]
     
     def _discover_from_sitemap(self, base_url: str) -> Set[str]:
         """Discover pages from sitemap.xml.
@@ -660,6 +503,105 @@ class WebsiteScraper:
         # Sort by priority score (descending)
         return sorted(urls, key=get_priority_score, reverse=True)
     
+    def _discover_pages_internal(self, base_url: str, max_pages: int = 10) -> List[str]:
+        """Internal page discovery method."""
+        try:
+            normalized_url = self._normalize_url(base_url)
+            
+            if not self._validate_url(normalized_url):
+                raise ValueError(f"Invalid base URL: {base_url}")
+            
+            working_url = self._try_url_variations(normalized_url)
+            discovered_urls = set()
+            
+            discovered_urls.add(working_url.rstrip('/'))
+            sitemap_urls = self._discover_from_sitemap(working_url)
+            discovered_urls.update(sitemap_urls)
+            
+            if len(discovered_urls) < max_pages:
+                link_urls = self._discover_from_links(working_url, max_pages - len(discovered_urls))
+                discovered_urls.update(link_urls)
+            
+            prioritized_urls = self._prioritize_business_pages(list(discovered_urls))
+            return prioritized_urls[:max_pages]
+            
+        except Exception as e:
+            try:
+                normalized_url = self._normalize_url(base_url)
+                working_url = self._try_url_variations(normalized_url)
+                return [working_url.rstrip('/')]
+            except:
+                return [base_url.rstrip('/')]
+    
+    def _scrape_text_internal(self, url: str) -> str:
+        """Internal text scraping method."""
+        normalized_url = self._normalize_url(url)
+        
+        if not self._validate_url(normalized_url):
+            raise ValueError(f"Invalid URL: {url}")
+        
+        working_url = self._try_url_variations(normalized_url)
+        
+        if not self._can_fetch(working_url):
+            raise ValueError(f"Robots.txt disallows scraping: {working_url}")
+        
+        response = self.session.get(working_url, timeout=self.timeout)
+        response.raise_for_status()
+        
+        soup = BeautifulSoup(response.content, 'html.parser')
+        
+        for script in soup(["script", "style", "nav", "footer", "header"]):
+            script.decompose()
+        
+        text_content = []
+        main_content = soup.find_all(['main', 'article', 'section']) or [soup]
+        
+        for content in main_content:
+            for element in content.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'div', 'span']):
+                text = element.get_text(strip=True)
+                if text and len(text) > 10:
+                    text_content.append(text)
+        
+        return self._clean_text(' '.join(text_content))
+    
+    def _scrape_images_internal(self, url: str) -> List[Dict[str, str]]:
+        """Internal image scraping method."""
+        normalized_url = self._normalize_url(url)
+        
+        if not self._validate_url(normalized_url):
+            raise ValueError(f"Invalid URL: {url}")
+        
+        working_url = self._try_url_variations(normalized_url)
+        
+        if not self._can_fetch(working_url):
+            raise ValueError(f"Robots.txt disallows scraping: {working_url}")
+        
+        response = self.session.get(working_url, timeout=self.timeout)
+        response.raise_for_status()
+        
+        soup = BeautifulSoup(response.content, 'html.parser')
+        images = []
+        
+        img_tags = soup.find_all('img')
+        
+        for img in img_tags[:settings.max_images_per_site]:
+            src = img.get('src')
+            alt = img.get('alt', '')
+            
+            if src:
+                absolute_url = urljoin(url, src)
+                
+                if self._is_valid_image(img, alt):
+                    images.append({
+                        'url': absolute_url,
+                        'alt_text': alt,
+                        'title': img.get('title', ''),
+                        'width': img.get('width', ''),
+                        'height': img.get('height', '')
+                    })
+        
+        return images
+    
     def scrape_business(self, base_url: str, options: ScrapingOptions = None) -> BusinessData:
         """Comprehensive business website analysis with unified output.
         
@@ -674,8 +616,8 @@ class WebsiteScraper:
         start_time = datetime.now()
         
         try:
-            # Step 1: Page Discovery (existing method)
-            discovered_urls = self.discover_pages(base_url, options.max_pages)
+            # Step 1: Page Discovery
+            discovered_urls = self._discover_pages_internal(base_url, options.max_pages)
             
             # Step 2: Process Each Page
             pages = []
@@ -749,14 +691,14 @@ class WebsiteScraper:
             images = []
             
             try:
-                text_content = self.scrape_text(url)
+                text_content = self._scrape_text_internal(url)
             except Exception as e:
                 # Continue with image scraping even if text fails
                 pass
             
             if options.include_images:
                 try:
-                    images = self.scrape_images(url)
+                    images = self._scrape_images_internal(url)
                 except Exception as e:
                     # Continue even if image scraping fails
                     pass
