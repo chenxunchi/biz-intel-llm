@@ -1,0 +1,297 @@
+{
+  "Coffee Shop Business": {
+    "url": "https://domscoffee.com/",
+    "business_type": "Coffee Shop Business",
+    "pages_discovered": [
+      "https://domscoffee.com/about",
+      "https://domscoffee.com/contact",
+      "https://domscoffee.com/home",
+      "https://domscoffee.com/menu",
+      "https://domscoffee.com/make-a-reservation",
+      "https://domscoffee.com/gallery",
+      "https://domscoffee.com/catering",
+      "https://www.domscoffee.com"
+    ],
+    "page_analysis": [
+      {
+        "url": "https://domscoffee.com/about",
+        "text_length": 10003,
+        "text_preview": "Our Family. Our Family. Our Family. Our Family. Our Family. Our Family. Our Family. Our Family. Our Family. Gitanaalthough you might not see her often, gitana is a founding member of the dom’s coffee family. earlier on in the business’s history, she worked the front of house as a barista, but her ta...",
+        "images_found": 7,
+        "sample_images": [
+          {
+            "url": "https://images.squarespace-cdn.com/content/v1/62793b88194b5408b089e592/0b1d6471-432c-41dd-b4ee-6fd97d43ed30/doms-02.png?format=1500w",
+            "alt_text": "DOM&#39;S COFFEE",
+            "title": "",
+            "width": "",
+            "height": ""
+          },
+          {
+            "url": "https://images.squarespace-cdn.com/content/v1/62793b88194b5408b089e592/0b1d6471-432c-41dd-b4ee-6fd97d43ed30/doms-02.png?format=1500w",
+            "alt_text": "DOM&#39;S COFFEE",
+            "title": "",
+            "width": "",
+            "height": ""
+          },
+          {
+            "url": "https://images.squarespace-cdn.com/content/v1/62793b88194b5408b089e592/1652118977613-CT282232F2AIA6VZZ8GE/untitled-3227.jpg",
+            "alt_text": "",
+            "title": "",
+            "width": "1669",
+            "height": "2500"
+          }
+        ]
+      },
+      {
+        "url": "https://domscoffee.com/contact",
+        "text_length": 10003,
+        "text_preview": "Contact Us.Hoursm-f: 7am-5pmsat-sun: 8am-5pmkitchen: 8am-3pm, everydayContact20 w. main | avon, ct 06001860-255-7232domscoffee@gmail.com Contact Us.Hoursm-f: 7am-5pmsat-sun: 8am-5pmkitchen: 8am-3pm, everydayContact20 w. main | avon, ct 06001860-255-7232domscoffee@gmail.com Contact Us.Hoursm-f: 7am-5...",
+        "images_found": 5,
+        "sample_images": [
+          {
+            "url": "https://images.squarespace-cdn.com/content/v1/62793b88194b5408b089e592/0b1d6471-432c-41dd-b4ee-6fd97d43ed30/doms-02.png?format=1500w",
+            "alt_text": "DOM&#39;S COFFEE",
+            "title": "",
+            "width": "",
+            "height": ""
+          },
+          {
+            "url": "https://images.squarespace-cdn.com/content/v1/62793b88194b5408b089e592/0b1d6471-432c-41dd-b4ee-6fd97d43ed30/doms-02.png?format=1500w",
+            "alt_text": "DOM&#39;S COFFEE",
+            "title": "",
+            "width": "",
+            "height": ""
+          },
+          {
+            "url": "https://images.squarespace-cdn.com/content/v1/62793b88194b5408b089e592/37827e77-9927-4a41-b577-a0cad07a307b/kettle-04.png",
+            "alt_text": "",
+            "title": "",
+            "width": "468",
+            "height": "276"
+          }
+        ]
+      },
+      {
+        "url": "https://domscoffee.com/home",
+        "text_length": 10003,
+        "text_preview": "Slide 1Slide 1 (current slide)Slide 2Slide 2 (current slide)Slide 3Slide 3 (current slide)Slide 4Slide 4 (current slide)Slide 5Slide 5 (current slide)Slide 6Slide 6 (current slide) Slide 1Slide 1 (current slide)Slide 2Slide 2 (current slide)Slide 3Slide 3 (current slide)Slide 4Slide 4 (current slide...",
+        "images_found": 10,
+        "sample_images": [
+          {
+            "url": "https://images.squarespace-cdn.com/content/v1/62793b88194b5408b089e592/0b1d6471-432c-41dd-b4ee-6fd97d43ed30/doms-02.png?format=1500w",
+            "alt_text": "DOM&#39;S COFFEE",
+            "title": "",
+            "width": "",
+            "height": ""
+          },
+          {
+            "url": "https://images.squarespace-cdn.com/content/v1/62793b88194b5408b089e592/0b1d6471-432c-41dd-b4ee-6fd97d43ed30/doms-02.png?format=1500w",
+            "alt_text": "DOM&#39;S COFFEE",
+            "title": "",
+            "width": "",
+            "height": ""
+          },
+          {
+            "url": "https://images.squarespace-cdn.com/content/v1/62793b88194b5408b089e592/af400fc0-4933-42b2-8bed-abc79377668b/_DSC1386.jpg",
+            "alt_text": "",
+            "title": "",
+            "width": "4016",
+            "height": "6016"
+          }
+        ]
+      }
+    ]
+  },
+  "Landscaping Company": {
+    "url": "https://www.valleyslandscape.com/",
+    "business_type": "Landscaping Company",
+    "pages_discovered": [
+      "http://valleyslandscape.com/services.html",
+      "http://valleyslandscape.com/landscape-services.html",
+      "http://valleyslandscape.com/contact-us.html",
+      "http://valleyslandscape.com/home.html",
+      "http://valleyslandscape.com/lawn-maintenance.html",
+      "http://valleyslandscape.com/our-story.html",
+      "http://valleyslandscape.com/driveway-sealing.html",
+      "https://www.valleyslandscape.com"
+    ],
+    "page_analysis": [
+      {
+        "url": "http://valleyslandscape.com/services.html",
+        "text_length": 2987,
+        "text_preview": "860.693.4355HomeOur StoryServicesLawn MaintenanceLandscape DesignLandscape ServicesWalkways, Patios & WallsSnow Plowing and RemovalDriveway SealingMulch and TopsoilSpecialsJob PostingsContact UsOrder Mulch OnlineOur ServicesLawn MaintenanceSpecialsLandscape DesignContact UsLandscape ServicesMulch, T...",
+        "images_found": 3,
+        "sample_images": [
+          {
+            "url": "https://nebula.wsimg.com/c14447774a8326ab9bd706e856c2d4f2?AccessKeyId=A2CE39428EFFA5130083&disposition=0&alloworigin=1",
+            "alt_text": "",
+            "title": "",
+            "width": "",
+            "height": ""
+          },
+          {
+            "url": "https://nebula.wsimg.com/b049991fad2939e77e6eb1bc508870b5?AccessKeyId=A2CE39428EFFA5130083&disposition=0&alloworigin=1",
+            "alt_text": "",
+            "title": "",
+            "width": "",
+            "height": ""
+          },
+          {
+            "url": "https://nebula.wsimg.com/b771c78f3c5c6cbc6b23c4d154a910ad?AccessKeyId=531592D248B589D87A56&disposition=0&alloworigin=1",
+            "alt_text": "",
+            "title": "",
+            "width": "",
+            "height": ""
+          }
+        ]
+      },
+      {
+        "url": "http://valleyslandscape.com/landscape-services.html",
+        "text_length": 4506,
+        "text_preview": "860.693.4355HomeOur StoryServicesLawn MaintenanceLandscape DesignLandscape ServicesWalkways, Patios & WallsSnow Plowing and RemovalDriveway SealingMulch and TopsoilSpecialsJob PostingsContact UsOrder Mulch OnlineAt Valley's Lawn and Landscape we are lawn care professionals. We are your one stop shop...",
+        "images_found": 6,
+        "sample_images": [
+          {
+            "url": "https://nebula.wsimg.com/c14447774a8326ab9bd706e856c2d4f2?AccessKeyId=A2CE39428EFFA5130083&disposition=0&alloworigin=1",
+            "alt_text": "",
+            "title": "",
+            "width": "",
+            "height": ""
+          },
+          {
+            "url": "https://nebula.wsimg.com/b049991fad2939e77e6eb1bc508870b5?AccessKeyId=A2CE39428EFFA5130083&disposition=0&alloworigin=1",
+            "alt_text": "",
+            "title": "",
+            "width": "",
+            "height": ""
+          },
+          {
+            "url": "https://nebula.wsimg.com/fe64051478c6248c0f8123a2a7f2f053?AccessKeyId=A2CE39428EFFA5130083&disposition=0&alloworigin=1",
+            "alt_text": "",
+            "title": "",
+            "width": "",
+            "height": ""
+          }
+        ]
+      },
+      {
+        "url": "http://valleyslandscape.com/contact-us.html",
+        "text_length": 3991,
+        "text_preview": "860.693.4355HomeOur StoryServicesLawn MaintenanceLandscape DesignLandscape ServicesWalkways, Patios & WallsSnow Plowing and RemovalDriveway SealingMulch and TopsoilSpecialsJob PostingsContact UsOrder Mulch Online860.693.4355 (O)860.693.6060 (F)p.o. box 284 canton, ct 06019DValley@Valleyslandscape.co...",
+        "images_found": 5,
+        "sample_images": [
+          {
+            "url": "https://nebula.wsimg.com/c14447774a8326ab9bd706e856c2d4f2?AccessKeyId=A2CE39428EFFA5130083&disposition=0&alloworigin=1",
+            "alt_text": "",
+            "title": "",
+            "width": "",
+            "height": ""
+          },
+          {
+            "url": "https://nebula.wsimg.com/b049991fad2939e77e6eb1bc508870b5?AccessKeyId=A2CE39428EFFA5130083&disposition=0&alloworigin=1",
+            "alt_text": "",
+            "title": "",
+            "width": "",
+            "height": ""
+          },
+          {
+            "url": "https://nebula.wsimg.com/d012907347388bb802cd4a7ce6ed677b?AccessKeyId=A2CE39428EFFA5130083&disposition=0&alloworigin=1",
+            "alt_text": "",
+            "title": "",
+            "width": "",
+            "height": ""
+          }
+        ]
+      }
+    ]
+  },
+  "Plumbing Services": {
+    "url": "https://avonplumbing.com/",
+    "business_type": "Plumbing Services",
+    "pages_discovered": [
+      "https://avonplumbing.com/about-us/testimonials/",
+      "https://avonplumbing.com/about-us/our-team/",
+      "https://avonplumbing.com/design-center/about-our-team/",
+      "https://avonplumbing.com/crazy-about-color/",
+      "https://avonplumbing.com/about-us/",
+      "https://avonplumbing.com/services/",
+      "https://avonplumbing.com/showroom-networking-event-2024/",
+      "https://avonplumbing.com/service/water-services/"
+    ],
+    "page_analysis": [
+      {
+        "url": "https://avonplumbing.com/about-us/testimonials/",
+        "text_length": 10003,
+        "text_preview": "What People Are SayingFor over 75 years, we’ve earned the trust of homeowners, builders and developers throughout the area. \u0003Few companies can match Avon Plumbing & Heating’s experienced workforce and reputation for quality. What People Are SayingFor over 75 years, we’ve earned the trust of homeowne...",
+        "images_found": 1,
+        "sample_images": [
+          {
+            "url": "https://avonplumbing.com/wp-content/uploads/2016/05/award.jpg",
+            "alt_text": "Text stating ",
+            "title": "",
+            "width": "",
+            "height": ""
+          }
+        ]
+      },
+      {
+        "url": "https://avonplumbing.com/about-us/our-team/",
+        "text_length": 4701,
+        "text_preview": "Our TeamThe team at Avon Plumbing & Heating are experts in the field. We can show you the latest styles, and help you make the best decisions for your home renovation – from start to finish! Our service department staff has the knowledge and expertise to help you get your DIY project completed with ...",
+        "images_found": 8,
+        "sample_images": [
+          {
+            "url": "https://avonplumbing.com/wp-content/uploads/2024/11/24-AVON-2898-GENERAL_TASKS-NOVEMBER-Headshots-Jeff-104x104.jpg",
+            "alt_text": "",
+            "title": "",
+            "width": "104",
+            "height": "104"
+          },
+          {
+            "url": "https://avonplumbing.com/wp-content/uploads/2016/06/john-headshot-104x104.png",
+            "alt_text": "A person with short hair and a mustache smiles slightly, wearing a white shirt, set against a solid teal background.",
+            "title": "",
+            "width": "104",
+            "height": "104"
+          },
+          {
+            "url": "https://avonplumbing.com/wp-content/uploads/2016/06/colleen-headshot-104x104.png",
+            "alt_text": "A person with long, wavy hair smiles, positioned against a solid teal background, wearing a dark top.",
+            "title": "",
+            "width": "104",
+            "height": "104"
+          }
+        ]
+      },
+      {
+        "url": "https://avonplumbing.com/design-center/about-our-team/",
+        "text_length": 5325,
+        "text_preview": "Our TeamThe team at AP&H are experts in their field. We'll show you the latest styles in our award-winning showroom and help you make the best decisions for your home renovation – from start to finish! Avon's parts department has the knowledge and expertise to help bring your DIY project to completi...",
+        "images_found": 4,
+        "sample_images": [
+          {
+            "url": "https://avonplumbing.com/wp-content/uploads/2024/11/24-AVON-2898-GENERAL_TASKS-NOVEMBER-Headshots-Stacy-104x104.jpg",
+            "alt_text": "",
+            "title": "",
+            "width": "104",
+            "height": "104"
+          },
+          {
+            "url": "https://avonplumbing.com/wp-content/uploads/2024/11/24-AVON-2898-GENERAL_TASKS-NOVEMBER-Headshots-Patty-104x104.jpg",
+            "alt_text": "",
+            "title": "",
+            "width": "104",
+            "height": "104"
+          },
+          {
+            "url": "https://avonplumbing.com/wp-content/uploads/2025/08/Judith_Todd-104x104.jpg",
+            "alt_text": "",
+            "title": "",
+            "width": "104",
+            "height": "104"
+          }
+        ]
+      }
+    ]
+  }
+}

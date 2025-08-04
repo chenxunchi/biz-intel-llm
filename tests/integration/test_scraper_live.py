@@ -11,7 +11,7 @@ import json
 from pathlib import Path
 
 # Add project root to path
-sys.path.append(str(Path(__file__).parent))
+sys.path.append(str(Path(__file__).parent.parent.parent))
 
 from core.scraper import WebsiteScraper
 
