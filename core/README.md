@@ -1,323 +1,293 @@
-# Core Business Logic Modules
+# Core Business Intelligence Modules
 
-This directory contains the core business intelligence processing modules for analyzing business websites and extracting insurance-relevant risk indicators.
+This directory contains the complete **3-pass business intelligence system** for analyzing business websites and extracting comprehensive intelligence for insurance underwriting.
+
+## 🎯 3-Pass Analysis Architecture
+
+The system implements a sophisticated 3-pass pipeline that combines text analysis, computer vision, and intelligent integration:
+
+```
+URL Input → Website Scraping → Pass 1 (Text) → Pass 2 (Images) → Pass 3 (Integration) → Final Analysis
+```
+
+---
 
 ## 📁 Module Overview
 
 ### 🕷️ `scraper.py` - Website Content Extraction
-**Status:** ✅ FULLY IMPLEMENTED (v2.0 - Unified Output)
+**Status:** ✅ FULLY IMPLEMENTED (Production Ready)
 
-**Purpose:** Ethical scraping of business websites with unified output structure for LLM integration.
+**Purpose:** Ethical scraping of business websites with unified output structure optimized for downstream AI analysis.
 
 **Key Classes:**
-- `WebsiteScraper` - Main scraping functionality with unified output
-- `ScrapingOptions` - Configuration dataclass for scraping behavior
-- `PageData` - Individual page scraping results
-- `BusinessData` - Complete business analysis results
+- `WebsiteScraper` - Main scraping functionality with comprehensive business intelligence
+- `ScrapingOptions` - Configuration for scraping behavior
+- `PageData` - Individual page results with metadata
+- `BusinessData` - Complete unified business data structure
 
-**Features:**
-- **🎯 Unified Output Architecture** - Single method provides complete business data
-- Text content extraction with cleaning and filtering
-- Image metadata extraction (URLs, alt text, dimensions)
-- Automatic page discovery via sitemap.xml and internal links
-- URL normalization (handles incomplete URLs like "abc.com")
-- Robots.txt compliance with domain-level caching
-- Business page prioritization and type classification
-- **📊 Business Intelligence Computation** - Automatic quality scoring and metrics
-- **🔧 Structured Data Format** - LLM-ready JSON output
-
-## 📥📤 INPUT/OUTPUT SPECIFICATION
-
-### **🚀 Primary Method: `scrape_business()`**
-
-**Input:**
-```python
-from core.scraper import WebsiteScraper, ScrapingOptions
-
-# Configuration options
-options = ScrapingOptions(
-    max_pages=10,           # Maximum pages to discover and scrape
-    include_images=True,    # Whether to extract image metadata
-    timeout_per_page=30,    # Timeout per page in seconds
-    page_types=[            # Page types to include
-        "about", "services", "contact", "home", "other"
-    ]
-)
-
-# Single method call
-scraper = WebsiteScraper()
-result = scraper.scrape_business("example.com", options)
-```
-
-**Output Structure:**
-```python
-BusinessData {
-    business_url: str              # Normalized input URL
-    scraped_at: datetime          # When scraping started
-    scraping_metadata: {          # Process metadata
-        "scraping_session": {
-            "started_at": "2024-01-01T10:00:00",
-            "completed_at": "2024-01-01T10:02:30", 
-            "total_duration_seconds": 150.5
-        },
-        "page_processing": {
-            "total_pages_attempted": 8,
-            "successful_pages": 7,
-            "failed_pages": 1,
-            "success_rate": 0.875
-        },
-        "errors": ["Page timeout: /large-gallery"],
-        "performance": {
-            "avg_time_per_page": 18.8,
-            "pages_per_minute": 3.2
-        }
-    },
-    pages: [PageData...]          # Individual page results
-    business_intelligence: {      # Computed business metrics
-        "scraping_metrics": {
-            "total_pages_found": 8,
-            "successful_pages": 7, 
-            "failed_pages": 1,
-            "success_rate": 0.875
-        },
-        "content_metrics": {
-            "total_text_length": 45230,
-            "total_images": 23,
-            "avg_text_per_page": 6461,
-            "avg_images_per_page": 3.3
-        },
-        "page_analysis": {
-            "page_types_found": ["home", "about", "services", "contact"],
-            "key_pages_present": {
-                "has_about": true,
-                "has_services": true, 
-                "has_contact": true,
-                "has_home": true
-            },
-            "content_quality_score": 0.87
-        },
-        "errors": ["Timeout on gallery page"]
-    }
-}
-```
-
-**Individual Page Data Structure:**
-```python
-PageData {
-    url: str                      # Full page URL
-    page_type: str                # "about" | "services" | "contact" | "home" | "other"
-    text_content: str             # Cleaned text content
-    text_length: int              # Character count
-    images: [                     # Image metadata only (no downloads)
-        {
-            "url": "https://example.com/photo.jpg",
-            "alt_text": "Team photo",
-            "title": "Our team",
-            "width": "300",
-            "height": "200"
-        }
-    ],
-    scraped_at: datetime          # When this page was processed
-    scrape_success: bool          # Whether scraping succeeded
-    error_message: str | None     # Error details if failed
-}
-```
-
-### **📊 Business Intelligence Metrics**
-
-The unified output automatically computes:
-- **Success Rate:** Percentage of pages successfully scraped
-- **Content Quality Score:** 0.0-1.0 based on text richness, images, key pages
-- **Page Type Analysis:** Classification and completeness assessment
-- **Performance Metrics:** Speed and efficiency measurements
-
-**Design Principles:**
-- 🎯 **LLM-First Design** - Output optimized for language model consumption
-- 🔧 **Unified Interface** - Single method call for complete business analysis
-- 📊 **Rich Metadata** - Built-in quality assessment and performance metrics
-- 🛡️ **Graceful Degradation** - Partial failures don't break entire process
-- ⚡ **Performance Aware** - Built-in timing and efficiency measurements
+**Advanced Features:**
+- Unified business intelligence output with quality scoring
+- Smart page discovery (sitemap.xml + internal links)
+- Business page prioritization and classification
+- URL normalization and robots.txt compliance
+- Comprehensive error handling with graceful degradation
 
 ---
 
-### 🤖 `summarizer.py` - LLM Business Analysis
-**Status:** 🔄 NEXT TO IMPLEMENT
+### 🤖 `summarizer.py` - Pass 1: Text Analysis & NAICS Prediction
+**Status:** ✅ FULLY IMPLEMENTED (Production Ready)
 
-**Purpose:** Generate business summaries and extract insurance risk indicators using Large Language Models.
+**Purpose:** Comprehensive text analysis using LLM with business understanding, NAICS classification, and risk assessment.
 
-**Planned Classes:**
-- `BusinessSummarizer` - LLM-based content analysis
+**Key Classes:**
+- `BusinessSummarizer` - LLM-powered business analysis
+- `TextAnalysisResult` - Structured text analysis output
 
-**Features to Implement:**
-- Business summary generation from website content
-- Risk indicator extraction (e-commerce, vehicle use, cyber risk)
-- Integration with OpenAI API / Azure OpenAI
-- Structured output parsing
-- Prompt template management
+**Advanced Features:**
+- **Business Intelligence Extraction**: Domain, scale, services, capabilities
+- **NAICS Classification**: 6-digit codes with confidence scoring (0.0-1.0)
+- **Text-Based Risk Assessment**: E-commerce, vehicle use, cyber risk with evidence
+- **Multi-Factor Confidence Scoring**: Website quality + specificity + keyword alignment
+- **OpenAI/Azure OpenAI Integration**: Flexible LLM backend support
 
-**Expected Usage:**
+**Usage:**
 ```python
 from core.summarizer import BusinessSummarizer
 
 summarizer = BusinessSummarizer()
-summary = summarizer.generate_summary(website_text)
-risks = summarizer.extract_risk_indicators(website_text)
+text_analysis = summarizer.analyze_business(scraped_business_data)
+
+# Access results
+print(f"Domain: {text_analysis.business_domain}")
+print(f"NAICS: {text_analysis.naics_code} (confidence: {text_analysis.naics_confidence:.1%})")
+print(f"Risks: {text_analysis.text_risk_indicators}")
 ```
 
 ---
 
-### 🏷️ `classifier.py` - NAICS Code Prediction
-**Status:** 🔄 PLANNED
+### 🖼️ `image_analysis.py` - Pass 2: Computer Vision Analysis  
+**Status:** ✅ FULLY IMPLEMENTED (Production Ready)
 
-**Purpose:** Predict North American Industry Classification System (NAICS) codes for businesses.
+**Purpose:** Azure Computer Vision-based analysis for visual business intelligence and risk assessment.
 
-**Planned Classes:**
-- `NAICSClassifier` - Business industry classification
+**Key Classes:**
+- `ImageAnalyzer` - Azure CV-powered image analysis
+- `VisualAnalysisResult` - Comprehensive visual analysis output
+- `ImageFilterResult` - Business-relevant image filtering results
 
-**Features to Implement:**
-- NAICS code prediction from business summaries
-- Model training on labeled business data
-- Integration with pre-trained models (BERT, etc.)
-- NAICS code description lookup
+**Advanced Features:**
+- **Business-Relevant Image Filtering**: Domain-specific scoring and prioritization
+- **Equipment & Vehicle Detection**: Context-aware object recognition
+- **Facility Analysis**: Scale and type assessment from visual evidence
+- **Visual Risk Indicators**: Equipment risk, facility risk assessment
+- **Business Capability Enhancement**: Visual evidence → additional business capabilities
 
-**Expected Usage:**
-```python
-from core.classifier import NAICSClassifier
-
-classifier = NAICSClassifier()
-naics_code = classifier.predict_naics(business_summary)
-description = classifier.get_naics_description(naics_code)
-```
-
----
-
-### 🖼️ `image_analysis.py` - Computer Vision
-**Status:** 🔄 PLANNED
-
-**Purpose:** Analyze business images for vehicle detection and risk assessment.
-
-**Planned Classes:**
-- `ImageAnalyzer` - CV-based risk object detection
-
-**Features to Implement:**
-- Vehicle detection using YOLOv8 or Azure Computer Vision
-- Risk-relevant object detection
-- Image analysis integration with scraped images
-- Confidence scoring and metadata extraction
-
-**Expected Usage:**
+**Usage:**
 ```python
 from core.image_analysis import ImageAnalyzer
 
 analyzer = ImageAnalyzer()
-vehicles = analyzer.detect_vehicles(image_url)
-risk_objects = analyzer.analyze_risk_objects(image_url)
+visual_analysis = analyzer.analyze_business_images(scraped_data, text_analysis)
+
+# Access results
+print(f"Equipment Detected: {visual_analysis.visual_business_insights['equipment_detected']}")
+print(f"Vehicle Risk: {visual_analysis.image_risk_indicators['vehicle_use']['level']}")
+```
+
+---
+
+### 🔄 `pipeline.py` - Pass 3: Integration & Orchestration
+**Status:** ✅ FULLY IMPLEMENTED (Production Ready)
+
+**Purpose:** Complete 3-pass pipeline orchestration with intelligent risk aggregation and enhanced analysis.
+
+**Key Classes:**
+- `BusinessIntelligencePipeline` - Complete system orchestration
+- `FinalBusinessAnalysis` - Final integrated analysis output
+
+**Advanced Features:**
+- **Intelligent Risk Aggregation**: Type-specific rules (vehicle: MAX, e-commerce: text-primary)
+- **Enhanced Summary Generation**: LLM-powered integration of text + visual insights
+- **Confidence Boosting**: Cross-validation between text and visual evidence
+- **Graceful Fallbacks**: Robust error handling with meaningful fallback results
+- **Comprehensive Metadata**: Complete pipeline execution tracking
+
+**Usage:**
+```python
+from core.pipeline import BusinessIntelligencePipeline
+
+# Complete end-to-end analysis
+pipeline = BusinessIntelligencePipeline()
+final_analysis = pipeline.analyze_business_website("https://example-business.com")
+
+# Access comprehensive results
+print(f"Enhanced Summary: {final_analysis.enhanced_business_summary}")
+print(f"Final Risks: {final_analysis.final_risk_indicators}")
+print(f"All Capabilities: {final_analysis.business_capabilities}")
 ```
 
 ---
 
 ### 🛠️ `utils.py` - Shared Utilities
-**Status:** 🔄 PLACEHOLDER
+**Status:** ✅ IMPLEMENTED (Production Ready)
 
-**Purpose:** Common utility functions used across the core modules.
+**Purpose:** Common utility functions for URL handling, text processing, and data management.
 
-**Functions to Implement:**
-- URL validation and normalization helpers
-- Data serialization and caching utilities
-- Configuration loading helpers
-- Error handling utilities
+**Key Functions:**
+- `validate_url()` - URL validation and normalization
+- `clean_business_text()` - Text cleaning and preprocessing  
+- `save_analysis_results()` - JSON serialization for results
+- `format_confidence_score()` - User-friendly confidence formatting
+- `extract_domain_from_url()` - Domain extraction utilities
 
 ---
 
 ## 📂 Prompts Directory (`prompts/`)
 
-### `business_summary.py` - LLM Prompt Templates
-**Status:** ✅ BASIC TEMPLATES CREATED
+### `business_summary.py` - Enhanced LLM Prompt Templates
+**Status:** ✅ FULLY IMPLEMENTED (Production Ready)
 
-Contains prompt templates for:
-- Business summary generation
-- Risk indicator extraction
-- Structured output formatting
+**Advanced Prompt Templates:**
+- `BUSINESS_ANALYSIS_PROMPT` - Comprehensive text analysis with structured JSON output
+- `BUSINESS_INTEGRATION_PROMPT` - Text + visual integration for enhanced summaries
+- `IMAGE_ANALYSIS_CONTEXT` - Business context for image analysis
+- `NAICS_CONFIDENCE_FACTORS` - Confidence scoring guidelines
 
-**Templates:**
-- `BUSINESS_SUMMARY_PROMPT` - Main business analysis
-- `RISK_EXTRACTION_PROMPT` - Insurance risk assessment
+**Features:**
+- Structured JSON response formatting
+- Multi-factor confidence assessment instructions
+- Business intelligence extraction guidelines
+- Risk-specific evidence requirements
 
-## 🔄 Data Flow Architecture
+---
 
+## 🔄 Intelligent Data Flow
+
+### **3-Pass Processing Pipeline:**
 ```
-Input URL → scraper.py → Raw Content
-                ↓
-         summarizer.py → Business Summary + Risk Indicators
-                ↓
-         classifier.py → NAICS Code
-                ↓
-      image_analysis.py → Vehicle/Risk Detection
-                ↓
-           Final Analysis Output
+1. BusinessData (scraper) → 2. TextAnalysisResult (summarizer) → 3. VisualAnalysisResult (image_analysis) → 4. FinalBusinessAnalysis (pipeline)
 ```
 
-## 🎯 Integration Patterns
+### **Risk Aggregation Logic:**
+- **Vehicle Use**: `MAX(text_level, visual_level)` - Visual evidence often overrides
+- **E-commerce**: `text_level` (primary) - Visual rarely provides e-commerce evidence  
+- **Cyber Risk**: `text_level` (only) - Visual provides minimal cyber insight
 
-### Error Handling Standard
+### **Confidence Enhancement:**
+- Text + Visual alignment → +0.2 confidence boost
+- Cross-validation between evidence sources
+- Multi-factor scoring (quality + specificity + keyword match)
+
+---
+
+## 📊 Output Data Structures
+
+### **Final Analysis Output (`FinalBusinessAnalysis`):**
+```python
+{
+    "enhanced_business_summary": "Professional landscaping company with commercial fleet...",
+    "naics_code": "561730",
+    "naics_confidence": 0.87,
+    "final_risk_indicators": {
+        "vehicle_use": {
+            "level": "High",
+            "confidence": 0.95, 
+            "primary_source": "visual",
+            "evidence": ["commercial trucks detected"],
+            "reasoning": "Visual confirmation overrides text assessment"
+        }
+    },
+    "business_capabilities": ["lawn care", "heavy equipment operations"],
+    "visual_enhancements": ["heavy equipment operations"],
+    "pipeline_metadata": { /* comprehensive execution info */ }
+}
+```
+
+---
+
+## 🧪 Testing Strategy
+
+### **Comprehensive Test Coverage (`tests/test_business_intelligence.py`):**
+- ✅ **Pass 1 Testing**: Text analysis with mocked LLM responses
+- ✅ **Pass 2 Testing**: Image analysis with mocked Azure CV
+- ✅ **Pass 3 Testing**: Integration logic and risk aggregation rules
+- ✅ **End-to-End Testing**: Complete pipeline scenarios
+- ✅ **Error Handling**: Fallback scenarios and graceful degradation
+- ✅ **Confidence Scoring**: NAICS and risk confidence validation
+
+### **Testing Patterns:**
+```python
+# Example test pattern with comprehensive mocking
+@patch('core.summarizer.openai.ChatCompletion.create')
+@patch('core.image_analysis.ComputerVisionClient')
+def test_complete_pipeline(self, mock_cv, mock_llm):
+    # Setup mocks with realistic responses
+    # Execute pipeline
+    # Assert comprehensive results
+```
+
+---
+
+## ⚙️ Configuration & Dependencies
+
+### **Environment Variables:**
+```bash
+# Required: LLM API
+OPENAI_API_KEY=your_key  # OR Azure OpenAI credentials
+
+# Required: Computer Vision  
+AZURE_CV_KEY=your_azure_cv_key
+AZURE_CV_ENDPOINT=your_azure_cv_endpoint
+
+# Optional: Analysis tuning
+MAX_IMAGES_FOR_ANALYSIS=5
+MIN_IMAGE_SIZE=100
+LLM_MODEL=gpt-3.5-turbo
+MAX_TOKENS=1000
+TEMPERATURE=0.3
+```
+
+### **Key Dependencies:**
+- `openai` - LLM integration for text analysis
+- `azure-cognitiveservices-vision-computervision` - Image analysis
+- `requests` + `beautifulsoup4` - Web scraping
+- `dataclasses` - Structured data management
+
+---
+
+## 🔧 Integration Patterns
+
+### **Error Handling Standard:**
 ```python
 try:
     # Main processing logic
     return processed_result
 except SpecificException as e:
-    raise Exception(f"Module-specific error: {str(e)}")
+    raise Exception(f"Pass-specific error: {str(e)}")
 except Exception as e:
-    raise Exception(f"Unexpected error in {module_name}: {str(e)}")
+    # Graceful fallback with meaningful error info
+    return create_fallback_result(error_message=str(e))
 ```
 
-### Configuration Access
+### **Configuration Access:**
 ```python
 from config.settings import settings
 
-# Access configuration values
+# Centralized configuration access
 api_key = settings.openai_api_key
-timeout = settings.max_scrape_timeout
+cv_endpoint = settings.azure_cv_endpoint
+max_images = settings.max_images_for_analysis
 ```
 
-### Logging Pattern
-```python
-from monitor.logging_config import get_logger
+---
 
-logger = get_logger(__name__)
-logger.info("Processing started")
-logger.error("Error occurred", exc_info=True)
-```
+## 🚀 Production Ready Status
 
-## 🧪 Testing Strategy
+All core modules are **production-ready** with:
+- ✅ Comprehensive error handling and graceful fallbacks
+- ✅ Extensive test coverage with mocked external dependencies
+- ✅ Flexible configuration system with environment variables
+- ✅ Performance optimization and resource management
+- ✅ Complete documentation and usage examples
 
-Each module follows the testing pattern established in `tests/test_scraper.py`:
-- Unit tests with mocked external dependencies
-- Comprehensive error case coverage
-- Integration testing for data flow
-- Performance testing for large inputs
-
-**Test Files:**
-- `tests/test_scraper.py` ✅ (Complete)
-- `tests/test_summarizer.py` 🔄 (To create)
-- `tests/test_classifier.py` 🔄 (To create)
-- `tests/test_image_analysis.py` 🔄 (To create)
-
-## 🚀 Development Priority
-
-**Next Implementation Order:**
-1. **`summarizer.py`** - Core LLM integration (IMMEDIATE)
-2. **`classifier.py`** - NAICS prediction
-3. **`image_analysis.py`** - Computer vision
-4. **Integration pipeline** - End-to-end workflow
-
-## 📋 Dependencies
-
-**Current Requirements:**
-- `requests` - HTTP client for scraping
-- `beautifulsoup4` - HTML parsing
-- `openai` / `azure-openai` - LLM integration
-- `ultralytics` - YOLOv8 for vehicle detection
-- `transformers` - BERT models for classification
-
-**Configuration:**
-All modules use centralized configuration from `config/settings.py` with environment variable support.
+**Ready for Phase 4:** Streamlit frontend integration and deployment.
