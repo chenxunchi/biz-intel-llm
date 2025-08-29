@@ -344,26 +344,10 @@ class UnderwritingService:
 
 ### **Accuracy Benchmarks**
 - **NAICS Classification**: 85%+ accuracy on professional business websites
-- **Risk Assessment**: High correlation with manual underwriting assessments
 - **Visual Enhancement**: 40%+ of businesses receive visual capability enhancements
 
 ---
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature/enhanced-analysis`)
-3. Implement changes with comprehensive tests
-4. Run full test suite (`python -m pytest tests/ -v`)
-5. Commit with descriptive message
-6. Submit Pull Request with detailed description
-
-**Testing Requirements:**
-- All new features must include unit tests
-- Integration tests for pipeline modifications
-- Real website validation for scraping changes
-
----
 
 ## 📝 License
 
