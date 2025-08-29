@@ -1,0 +1,167 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.5, pytest-8.4.1, pluggy-1.6.0 -- C:\Users\chenx\AppData\Local\Programs\Python\Python313\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\chenx\OneDrive\Documents\biz-intel-llm-main
+collecting ... collected 14 items
+
+tests/unit/test_scraper.py::TestWebsiteScraper::test_clean_text_functionality PASSED [  7%]
+tests/unit/test_scraper.py::TestWebsiteScraper::test_image_validation PASSED [ 14%]
+tests/unit/test_scraper.py::TestWebsiteScraper::test_robots_txt_allowed PASSED [ 21%]
+tests/unit/test_scraper.py::TestWebsiteScraper::test_robots_txt_disallowed FAILED [ 28%]
+tests/unit/test_scraper.py::TestWebsiteScraper::test_robots_txt_not_found PASSED [ 35%]
+tests/unit/test_scraper.py::TestWebsiteScraper::test_scrape_images_invalid_url FAILED [ 42%]
+tests/unit/test_scraper.py::TestWebsiteScraper::test_scrape_images_request_error PASSED [ 50%]
+tests/unit/test_scraper.py::TestWebsiteScraper::test_scrape_images_success PASSED [ 57%]
+tests/unit/test_scraper.py::TestWebsiteScraper::test_scrape_text_invalid_url FAILED [ 64%]
+tests/unit/test_scraper.py::TestWebsiteScraper::test_scrape_text_request_error PASSED [ 71%]
+tests/unit/test_scraper.py::TestWebsiteScraper::test_scrape_text_success PASSED [ 78%]
+tests/unit/test_scraper.py::TestWebsiteScraper::test_scrape_with_timeout FAILED [ 85%]
+tests/unit/test_scraper.py::TestWebsiteScraper::test_url_validation_invalid_urls PASSED [ 92%]
+tests/unit/test_scraper.py::TestWebsiteScraper::test_url_validation_valid_urls PASSED [100%]
+
+================================== FAILURES ===================================
+________________ TestWebsiteScraper.test_robots_txt_disallowed ________________
+tests\unit\test_scraper.py:211: in mock_get_side_effect
+    raise Exception("Should not reach here")
+E   Exception: Should not reach here
+
+During handling of the above exception, another exception occurred:
+tests\unit\test_scraper.py:216: in test_robots_txt_disallowed
+    self.scraper.scrape_text("https://example.com/page")
+core\scraper.py:82: in scrape_text
+    raise Exception(f"Unexpected error scraping {url}: {str(e)}")
+E   Exception: Unexpected error scraping https://example.com/page: Should not reach here
+______________ TestWebsiteScraper.test_scrape_images_invalid_url ______________
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connection.py:198: in _new_conn
+    sock = connection.create_connection(
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\util\connection.py:60: in create_connection
+    for res in socket.getaddrinfo(host, port, family, socket.SOCK_STREAM):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\socket.py:977: in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   socket.gaierror: [Errno 11001] getaddrinfo failed
+
+The above exception was the direct cause of the following exception:
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py:787: in urlopen
+    response = self._make_request(
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py:488: in _make_request
+    raise new_e
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py:464: in _make_request
+    self._validate_conn(conn)
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py:1093: in _validate_conn
+    conn.connect()
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connection.py:753: in connect
+    self.sock = sock = self._new_conn()
+                       ^^^^^^^^^^^^^^^^
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connection.py:205: in _new_conn
+    raise NameResolutionError(self.host, self, e) from e
+E   urllib3.exceptions.NameResolutionError: <urllib3.connection.HTTPSConnection object at 0x0000013D4B0311D0>: Failed to resolve 'invalid_url' ([Errno 11001] getaddrinfo failed)
+
+The above exception was the direct cause of the following exception:
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\adapters.py:667: in send
+    resp = conn.urlopen(
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py:841: in urlopen
+    retries = retries.increment(
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\util\retry.py:519: in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='invalid_url', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x0000013D4B0311D0>: Failed to resolve 'invalid_url' ([Errno 11001] getaddrinfo failed)"))
+
+During handling of the above exception, another exception occurred:
+core\scraper.py:106: in scrape_images
+    response = self.session.get(working_url, timeout=self.timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\sessions.py:602: in get
+    return self.request("GET", url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\sessions.py:589: in request
+    resp = self.send(prep, **send_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\sessions.py:703: in send
+    r = adapter.send(request, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\adapters.py:700: in send
+    raise ConnectionError(e, request=request)
+E   requests.exceptions.ConnectionError: HTTPSConnectionPool(host='invalid_url', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x0000013D4B0311D0>: Failed to resolve 'invalid_url' ([Errno 11001] getaddrinfo failed)"))
+
+During handling of the above exception, another exception occurred:
+tests\unit\test_scraper.py:155: in test_scrape_images_invalid_url
+    self.scraper.scrape_images("invalid_url")
+core\scraper.py:136: in scrape_images
+    raise Exception(f"Error scraping images from {url}: {str(e)}")
+E   Exception: Error scraping images from invalid_url: HTTPSConnectionPool(host='invalid_url', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x0000013D4B0311D0>: Failed to resolve 'invalid_url' ([Errno 11001] getaddrinfo failed)"))
+_______________ TestWebsiteScraper.test_scrape_text_invalid_url _______________
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connection.py:198: in _new_conn
+    sock = connection.create_connection(
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\util\connection.py:60: in create_connection
+    for res in socket.getaddrinfo(host, port, family, socket.SOCK_STREAM):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\socket.py:977: in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   socket.gaierror: [Errno 11001] getaddrinfo failed
+
+The above exception was the direct cause of the following exception:
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py:787: in urlopen
+    response = self._make_request(
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py:488: in _make_request
+    raise new_e
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py:464: in _make_request
+    self._validate_conn(conn)
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py:1093: in _validate_conn
+    conn.connect()
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connection.py:753: in connect
+    self.sock = sock = self._new_conn()
+                       ^^^^^^^^^^^^^^^^
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connection.py:205: in _new_conn
+    raise NameResolutionError(self.host, self, e) from e
+E   urllib3.exceptions.NameResolutionError: <urllib3.connection.HTTPSConnection object at 0x0000013D4B030A50>: Failed to resolve 'invalid_url' ([Errno 11001] getaddrinfo failed)
+
+The above exception was the direct cause of the following exception:
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\adapters.py:667: in send
+    resp = conn.urlopen(
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py:841: in urlopen
+    retries = retries.increment(
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\util\retry.py:519: in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='invalid_url', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x0000013D4B030A50>: Failed to resolve 'invalid_url' ([Errno 11001] getaddrinfo failed)"))
+
+During handling of the above exception, another exception occurred:
+core\scraper.py:53: in scrape_text
+    response = self.session.get(working_url, timeout=self.timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\sessions.py:602: in get
+    return self.request("GET", url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\sessions.py:589: in request
+    resp = self.send(prep, **send_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\sessions.py:703: in send
+    r = adapter.send(request, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\adapters.py:700: in send
+    raise ConnectionError(e, request=request)
+E   requests.exceptions.ConnectionError: HTTPSConnectionPool(host='invalid_url', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x0000013D4B030A50>: Failed to resolve 'invalid_url' ([Errno 11001] getaddrinfo failed)"))
+
+During handling of the above exception, another exception occurred:
+tests\unit\test_scraper.py:148: in test_scrape_text_invalid_url
+    self.scraper.scrape_text("invalid_url")
+core\scraper.py:80: in scrape_text
+    raise Exception(f"Error scraping text from {url}: {str(e)}")
+E   Exception: Error scraping text from invalid_url: HTTPSConnectionPool(host='invalid_url', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x0000013D4B030A50>: Failed to resolve 'invalid_url' ([Errno 11001] getaddrinfo failed)"))
+_________________ TestWebsiteScraper.test_scrape_with_timeout _________________
+tests\unit\test_scraper.py:170: in test_scrape_with_timeout
+    mock_get.assert_called_with("https://example.com", timeout=self.scraper.timeout)
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:979: in assert_called_with
+    raise AssertionError(_error_message()) from cause
+E   AssertionError: expected call not found.
+E   Expected: get('https://example.com', timeout=30)
+E     Actual: get('https://www.example.com', timeout=30)
+=========================== short test summary info ===========================
+FAILED tests/unit/test_scraper.py::TestWebsiteScraper::test_robots_txt_disallowed
+FAILED tests/unit/test_scraper.py::TestWebsiteScraper::test_scrape_images_invalid_url
+FAILED tests/unit/test_scraper.py::TestWebsiteScraper::test_scrape_text_invalid_url
+FAILED tests/unit/test_scraper.py::TestWebsiteScraper::test_scrape_with_timeout
+======================== 4 failed, 10 passed in 55.21s ========================
