@@ -30,12 +30,18 @@ End-to-end AI system that analyzes business websites to extract insurance underw
 - ✅ Business page prioritization
 - ✅ Comprehensive error handling
 
-**Key Methods:**
+**Current API (3-Pass Pipeline):**
 ```python
-scraper = WebsiteScraper()
-text = scraper.scrape_text(url)                    # Returns cleaned text
-images = scraper.scrape_images(url)                # Returns image metadata
-pages = scraper.discover_pages(base_url, max=10)   # Returns prioritized URLs
+# Main pipeline usage
+from core.pipeline import BusinessIntelligencePipeline
+
+pipeline = BusinessIntelligencePipeline()
+result = pipeline.analyze_business_website("https://example.com")
+
+# Access complete analysis
+print(result.enhanced_business_summary)
+print(result.naics_code, result.naics_confidence)
+print(result.final_risk_indicators)
 ```
 
 **Design Principles:**
