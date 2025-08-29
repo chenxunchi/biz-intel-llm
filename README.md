@@ -6,7 +6,7 @@ This project demonstrates a business intelligence system for insurance underwrit
 
 **Development Approach:**
 - **Built with AI**: **English is the coding language!** The whole project was done with **Claude Code**, from idea brainstorm, code developing, testing, deployment to documentation.
-- **AI-accelerated development**: 3,700+ lines of Python code was written and tested using Claude Code in <20 hours, **saving 80+% development time**.
+- **AI-accelerated development**: 3,700+ lines of Python code and ~2,000 lines of documentation was written and tested using Claude Code in <20 hours, **saving 80+% development time**.
 - **Production-ready architecture**: Implements industry best practices for scalable, maintainable systems
 - **Comprehensive testing**: Includes both unit tests and real-world validation
 
