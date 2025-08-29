@@ -5,7 +5,8 @@
 This project demonstrates a business intelligence system for insurance underwriting that analyzes business websites to extract risk indicators and industry classifications. The system showcases modern AI development practices by combining text analysis, computer vision, and intelligent integration in a production-ready pipeline.
 
 **Development Approach:**
-- **Built with AI assistance**: Developed using Claude Code in a matter of hours, demonstrating AI-accelerated development capabilities
+- **Built with AI**: English is the coding language! The whole project was done with Claude Code, from idea brainstorm, code developing, testing, deployment to documentation.
+- **AI-accelerated development**: 3,700+ lines of Python code was written and tested using Claude Code in <20 hours, saving 80+% development time.
 - **Production-ready architecture**: Implements industry best practices for scalable, maintainable systems
 - **Comprehensive testing**: Includes both unit tests and real-world validation
 
